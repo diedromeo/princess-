@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Princess Sid — Surprise 💖</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600;700&display=swap');
+
+:root{--pink1:#ffb6d2;--pink2:#ff69b4;--deep:#d81b60}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#000;color:#fff;font-family:Poppins,Arial;overflow-x:hidden}
+
+.wrapper{width:820px;max-width:96vw;margin:80px auto;position:relative}
+
+#envCanvas{width:100%;height:460px;border-radius:16px;transition:opacity .4s}
+
+#instruction{
+ position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ text-align:center;color:var(--pink1);font-weight:600;
+}
+
+#sigModal{
+ position:fixed;inset:0;background:rgba(0,0,0,.82);
+ display:flex;align-items:center;justify-content:center;
+ visibility:hidden;opacity:0;transition:.3s;z-index:50;
+}
+#sigModal.show{visibility:visible;opacity:1}
+
+.sigCard{
+ background:#111;border-radius:14px;border:1px solid rgba(255,255,255,0.1);
+ padding:20px;width:88%;max-width:700px;
+}
+
+#sigCanvas{
+ width:100%;height:140px;background:#080808;
+ border:2px solid rgba(255,105,180,0.2);border-radius:10px;
+}
+
+.btn{padding:10px 16px;border-radius:999px;border:none;font-weight:700;cursor:pointer}
+.btnClear{background:#111;color:var(--pink1)}
+.btnConfirm{background:var(--pink2);color:#fff}
+
+#gifBox{
+ position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+ width:min(92vw,1200px);max-height:88vh;background:#000;
+ border-radius:16px;padding:10px;z-index:40;display:none;
+ border:1px solid rgba(255,255,255,0.2);
+}
+#gifImg{max-width:100%;max-height:100%;opacity:0;transition:.3s}
+
+#holdImageBox{
+ position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+ width:min(92vw,1200px);max-height:88vh;background:#000;
+ border-radius:16px;padding:10px;z-index:42;display:none;
+ border:1px solid rgba(255,255,255,0.2);
+}
+#holdImage{max-width:100%;max-height:100%;object-fit:contain}
+
+.revealWrap{
+ position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+ width:100%;pointer-events:none;z-index:45;
+}
+
+#certificate,#letter{
+ width:min(90%,720px);margin:20px auto;background:#111;
+ padding:20px;border-radius:14px;border:1px solid rgba(255,105,180,0.2);
+ opacity:0;transform:translateY(40px);transition:.5s;display:none;pointer-events:auto;
+}
+
+.certBox{
+ margin-top:12px;padding:18px;background:#181818;border-radius:12px;
+ border:3px solid var(--deep);position:relative;text-align:center;
+}
+.certBox::after{
+ content:"SEALED";position:absolute;top:20px;right:20px;
+ font-family:'Dancing Script';font-size:32px;color:var(--pink2);
+ padding:6px 12px;border:3px double var(--pink2);
+ border-radius:8px;transform:rotate(8deg);
+}
+
+.floatEmoji{
+ position:fixed;bottom:-10px;font-size:36px;opacity:0;
+ animation:floatUp 5s linear forwards;z-index:80;
+}
+@keyframes floatUp{
+ 0%{transform:translateY(0) scale(.5);opacity:0;}
+ 20%{opacity:1;}
+ 100%{transform:translateY(-100vh) scale(1);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper" id="wrap">
+ <canvas id="envCanvas"></canvas>
+
+ <div id="instruction">
+   <span style="font-size:60px;display:block;margin-bottom:10px">🎀</span>
+   Click the envelope to open ✨
+ </div>
+
+ <div id="sigModal">
+  <div class="sigCard">
+   <h2 style="font-family:'Dancing Script';color:var(--deep);text-align:center;margin:0 0 10px">
+     Princess Sid, sign your Royal Autograph
+   </h2>
+   <canvas id="sigCanvas"></canvas>
+
+   <div style="text-align:center;margin-top:12px">
+     <button class="btn btnClear" id="clearSig">Clear</button>
+     <button class="btn btnConfirm" id="confirmSig">Confirm</button>
+   </div>
+
+   <div id="sigMsg" style="text-align:center;margin-top:10px"></div>
+  </div>
+ </div>
+</div>
+
+<!-- GIF BOX -->
+<div id="gifBox"><img id="gifImg"></div>
+
+<!-- HOLD IMAGE BOX FOR 6 SECONDS -->
+<div id="holdImageBox">
+ <img src="image.png" id="holdImage">
+</div>
+
+<!-- CERT + LETTER -->
+<div class="revealWrap">
+ <div id="certificate">
+   <h2 style="font-family:'Dancing Script';color:var(--deep);font-size:30px;margin:0">
+     🎀 Official Princess Certificate
+   </h2>
+   <div class="certBox">
+     <p style="color:#ffdcec;font-size:17px">
+       This certifies that <b style="color:#ff9cdc">Sid</b> is a real Princess —
+       sweet, strong, hardworking & deserving of everything beautiful. 💖
+     </p>
+     <div id="sigPlaced"></div>
+   </div>
+ </div>
+
+ <div id="letter">
+   <h2 style="font-family:'DancingScript';color:var(--deep);font-size:30px;margin:0">
+     💌 A Note For You
+   </h2>
+   <p style="color:#f4c6e0;line-height:1.6;font-size:17px;margin-top:12px">
+     Sid… you're genuinely a bunch of cuteness and strength.  
+     Tum itni mehnat karti ho… it's beautiful. 💗<br><br>
+     Stress hota hai but it's okay… breathe.  
+     Stay calm. Stay soft. Stay cute. Everything you want will come. 💕<br><br>
+     Main always proud of you, Princess. 👑💞
+   </p>
+ </div>
+</div>
+
+<!-- MUSIC -->
+<audio id="gifMusic" src="https://quotesgames.com/files/I-Think-They-Call-This-Love-Matthew-Ifield-Cover.mp3" preload="auto"></audio>
+
+<audio id="letterMusic" 
+src="https://download.downringtone.com/audio/e9685a2856feb05f00d911fe07dbde95/L3TkhLK4TBF2bJp0R7toMkC1RXE3WL8zOlC8Uak7L1H1inzSigliM3lmgZ00Q3BudXzalQVlcZCwWtpqcj3Hf8j1kvlvb6V0htc3Y3BwPr73U5==.mp3" 
+preload="auto"></audio>
+
+<script>
+
+// ELEMENTS
+const wrap=document.getElementById("wrap");
+const canvas=document.getElementById("envCanvas");
+const ctx=canvas.getContext("2d");
+const sigModal=document.getElementById("sigModal");
+const sigCanvas=document.getElementById("sigCanvas");
+const sigCtx=sigCanvas.getContext("2d");
+
+const confirmBtn=document.getElementById("confirmSig");
+const clearBtn=document.getElementById("clearSig");
+const sigMsg=document.getElementById("sigMsg");
+
+const gifBox=document.getElementById("gifBox");
+const gifImg=document.getElementById("gifImg");
+
+const holdImageBox=document.getElementById("holdImageBox");
+
+const certificate=document.getElementById("certificate");
+const letter=document.getElementById("letter");
+const sigPlaced=document.getElementById("sigPlaced");
+
+const gifMusic=document.getElementById("gifMusic");
+const letterMusic=document.getElementById("letterMusic");
+
+let drawn=false, signing=false;
+
+// GIF LIST
+const gifs=[
+ "https://64.media.tumblr.com/a35bdef48388e8a53ba334f4c3729eb5/cf7ffbf099b9bbcb-9d/s640x960/44161faf6427137625849ddf2a016c71e8cc36ec.gif",
+ "https://i.pinimg.com/originals/0e/bd/86/0ebd8658f7610a409cdce22341cb2125.gif",
+ "https://i.pinimg.com/originals/d0/59/38/d05938855efab24f43c756b280f08787.gif",
+ "https://64.media.tumblr.com/c2106e621e3e17b6fde6e17f889227f7/cf7ffbf099b9bbcb-5e/s500x750/cd638aa91ad60f515de1871bf179b6325d91bb56.gif"
+];
+
+resizeAll();
+window.addEventListener("resize",resizeAll);
+
+function resizeAll(){
+ let r=wrap.getBoundingClientRect();
+ canvas.width=r.width*devicePixelRatio;
+ canvas.height=460*devicePixelRatio;
+ canvas.style.width=r.width+"px";
+ canvas.style.height="460px";
+ ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+
+ sigCanvas.width=r.width*0.9*devicePixelRatio;
+ sigCanvas.height=140*devicePixelRatio;
+}
+
+canvas.onclick=()=>sigModal.classList.add("show");
+
+sigCanvas.addEventListener("pointerdown",e=>{
+ signing=true;drawn=true;sigMsg.textContent="";
+ let r=sigCanvas.getBoundingClientRect(),p=e;
+ sigCtx.beginPath();sigCtx.moveTo(p.clientX-r.left,p.clientY-r.top);
+});
+sigCanvas.addEventListener("pointermove",e=>{
+ if(!signing)return;
+ let r=sigCanvas.getBoundingClientRect(),p=e;
+ sigCtx.lineWidth=5;sigCtx.strokeStyle="#ffd0e7";
+ sigCtx.lineTo(p.clientX-r.left,p.clientY-r.top);sigCtx.stroke();
+ sigCtx.beginPath();sigCtx.moveTo(p.clientX-r.left,p.clientY-r.top);
+});
+sigCanvas.addEventListener("pointerup",()=>signing=false);
+
+clearBtn.onclick=()=>{
+ sigCtx.clearRect(0,0,sigCanvas.width,sigCanvas.height);
+ drawn=false;
+};
+
+function fadeIn(a){
+ a.volume=0;a.currentTime=0;a.play().catch(()=>{});
+ let v=0, iv=setInterval(()=>{v+=0.03;a.volume=v;if(v>=1)clearInterval(iv);},50);
+}
+
+function fadeOut(a){
+ let v=a.volume,iv=setInterval(()=>{v-=0.03;a.volume=v;if(v<=0){a.pause();clearInterval(iv);}},50);
+}
+
+confirmBtn.onclick=()=>{
+ if(!drawn){sigMsg.textContent="Sign first";return;}
+
+ sigModal.classList.remove("show");
+ canvas.style.opacity=0;
+
+ // MUSIC 1 START
+ fadeIn(gifMusic);
+
+ setTimeout(()=>playGIF(0),500);
+};
+
+// GIF SEQUENCE
+function playGIF(i){
+ if(i>=gifs.length){
+  fadeOut(gifMusic);
+  showHoldImage();
+  return;
+ }
+
+ gifBox.style.display="block";
+ gifImg.style.opacity=0;
+
+ let img=new Image();
+ img.onload=()=>{
+  gifImg.src=gifs[i];
+  setTimeout(()=>gifImg.style.opacity=1,50);
+  setTimeout(()=>{gifImg.style.opacity=0;setTimeout(()=>playGIF(i+1),300)},2000);
+ };
+ img.onerror=()=>playGIF(i+1);
+ img.src=gifs[i];
+}
+
+// SHOW image.png for 6 seconds
+function showHoldImage(){
+ gifBox.style.display="none";
+ holdImageBox.style.display="block";
+
+ setTimeout(()=>{
+   holdImageBox.style.display="none";
+   showCert();
+ },6000);
+}
+
+// SHOW CERTIFICATE + SONG 2
+function showCert(){
+
+ // signature
+ try{
+   let d=sigCanvas.toDataURL();
+   sigPlaced.innerHTML=`<img src="${d}" style="height:42px">`;
+ }catch{}
+
+ certificate.style.display="block";
+ setTimeout(()=>{
+  certificate.style.opacity=1;
+  certificate.style.transform="translateY(0)";
+ },40);
+
+ // MUSIC 2 START
+ setTimeout(()=>fadeIn(letterMusic),200);
+
+ // LETTER
+ setTimeout(()=>{
+  letter.style.display="block";
+  setTimeout(()=>{
+    letter.style.opacity=1;
+    letter.style.transform="translateY(0)";
+  },40);
+ },600);
+
+ startEmojis();
+}
+
+// EMOJIS FLOATING
+function startEmojis(){
+ setInterval(()=>{
+  let e=document.createElement("div");
+  e.className="floatEmoji";
+  e.textContent=["🎀","💕","💗","✨","👑","🩷","🌸","💌"][Math.floor(Math.random()*8)];
+  e.style.left=(5+Math.random()*90)+"vw";
+  document.body.appendChild(e);
+  setTimeout(()=>e.remove(),5000);
+ },350);
+}
+</script>
+
+</body>
+</html>
