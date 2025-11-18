@@ -2,137 +2,107 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Princess Sid — Deluxe Surprise 💖</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600;700&display=swap');
 
 :root{--pink1:#ffb6d2;--pink2:#ff69b4;--deep:#d81b60;--gold:#e6c07b}
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:#000;color:#fff;font-family:Poppins,system-ui,Arial;overflow-x:hidden}
+.wrapper{width:820px;max-width:96vw;position:relative;margin:auto;padding-top:60px}
 
-html,body{
- height:100%;
- background:#000;
- color:#fff;
- font-family:Poppins,system-ui,Arial;
- overflow-x:hidden;
+#envCanvas{width:100%;height:460px;border-radius:16px;transition:opacity .4s}
+
+/* simple mobile tweak only */
+@media (max-width: 640px){
+  .wrapper{padding-top:24px;}
+  #envCanvas{height:360px;}
 }
 
-.wrapper{
- width:820px;
- max-width:96vw;
- margin:auto;
- padding-top:60px;
- position:relative;
-}
-
-/* MOBILE FIX */
-@media(max-width:600px){
- .wrapper{padding-top:20px;}
- #instruction span{font-size:46px;}
- #envCanvas{height:350px;}
-}
-
-#envCanvas{
- width:100%;
- height:460px;
- border-radius:16px;
- transition:opacity .4s;
-}
-
-/* instruction */
 #instruction{
- position:absolute;left:50%;top:50%;
- transform:translate(-50%,-50%);
- text-align:center;color:var(--pink1);
- font-weight:700;pointer-events:none;
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    color:var(--pink1);font-weight:700;text-align:center;pointer-events:none;
 }
 
-/* Signature modal */
 #sigModal{
  position:fixed;inset:0;background:rgba(0,0,0,.85);
  display:flex;align-items:center;justify-content:center;
  visibility:hidden;opacity:0;transition:.25s;z-index:50;
 }
 #sigModal.show{visibility:visible;opacity:1}
-
 .sigCard{
- width:90%;max-width:720px;background:#111;
- padding:20px;border-radius:16px;
- border:1px solid rgba(255,255,255,.1);
+ width:88%;max-width:720px;background:#111;border-radius:16px;
+ padding:20px;border:1px solid rgba(255,255,255,0.08);
 }
 
 #sigCanvas{
- width:100%;height:130px;background:#080808;
- border-radius:10px;border:2px solid rgba(255,105,180,.2);
- touch-action:none;
+ width:100%;height:130px;background:#0a0a0a;
+ border:2px solid rgba(255,105,180,0.15);
+ border-radius:10px;touch-action:none;
 }
 
 .btn{padding:10px 16px;border-radius:999px;font-weight:700;border:none;cursor:pointer}
 .btnClear{background:#111;color:var(--pink1)}
 .btnConfirm{background:var(--pink2);color:#fff}
 
-/* GIF box */
 #gifBox{
  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
- width:min(94vw,1100px);
- max-height:88vh;display:none;
- border-radius:14px;padding:10px;background:#000;
- border:1px solid rgba(255,255,255,.15);
- z-index:40;
+ width:min(92vw,1200px);max-height:88vh;background:#000;
+ padding:10px;border-radius:14px;display:none;
+ border:1px solid rgba(255,255,255,0.1);z-index:40;
 }
 #gifImg{
- width:100%;height:100%;object-fit:contain;
+ max-width:100%;max-height:100%;object-fit:contain;
  opacity:0;transition:.3s;
 }
 
-/* PNG 6-second box */
+/* NEW: 6-second PNG holder, centered like GIF */
 #holdImageBox{
- position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
- width:min(94vw,1100px);
- max-height:88vh;background:#000;
- border-radius:14px;padding:10px;
- border:1px solid rgba(255,255,255,.15);
- display:none;z-index:42;
+ position:fixed;
+ left:50%;top:50%;transform:translate(-50%,-50%);
+ width:min(92vw,1200px);max-height:88vh;
+ background:#000;border-radius:14px;
+ padding:10px;border:1px solid rgba(255,255,255,0.1);
+ display:none;z-index:41;
 }
-#holdImage{width:100%;height:100%;object-fit:contain}
+#holdImage{
+  width:100%;height:100%;object-fit:contain;display:block;
+}
 
-/* Reveal wrapper */
 .revealWrap{
- position:fixed;left:50%;top:50%;
- transform:translate(-50%,-50%);
- width:100%;pointer-events:none;z-index:45;
+ position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+ width:100%;max-width:100vw;z-index:45;pointer-events:none;
 }
-
 #certificate,#letter{
- width:min(90%,720px);
- background:#111;border-radius:16px;
- padding:20px;border:1px solid rgba(255,105,180,0.2);
- opacity:0;transform:translateY(40px);
- transition:.5s;display:none;pointer-events:auto;
- margin:20px auto;
+ width:min(90%,720px);margin:20px auto;opacity:0;
+ transform:translateY(40px);transition:.5s;
+ pointer-events:auto;display:none;
 }
 
-/* certificate */
+.card{
+ background:#111;border-radius:16px;padding:20px;
+ border:1px solid rgba(255,105,180,0.2);
+}
+
 .certBox{
  background:#181818;border-radius:14px;padding:18px;
- border:3px solid var(--deep);position:relative;text-align:center;
+ border:3px solid var(--deep);
+ position:relative;text-align:center;
 }
 .certBox::after{
- content:"SEALED";position:absolute;
- top:20px;right:20px;
- font-family:'Dancing Script';
- font-size:32px;color:var(--pink2);
- padding:4px 12px;border:3px double var(--pink2);
- border-radius:8px;transform:rotate(8deg);
+ content:"SEALED";position:absolute;top:20px;right:20px;
+ font-family:'Dancing Script';font-size:34px;color:var(--pink2);
+ padding:6px 14px;border:3px double var(--pink2);border-radius:8px;
+ transform:rotate(8deg);
 }
 
-/* emojis */
+#burst{position:fixed;inset:0;pointer-events:none;z-index:60}
+
 .floatEmoji{
- position:fixed;bottom:-10px;font-size:38px;
- opacity:0;animation:floatUp 5s linear forwards;
- z-index:80;
+ position:fixed;bottom:-10px;font-size:36px;opacity:0;
+ animation:floatUp 5s ease-out forwards;z-index:70;
 }
 @keyframes floatUp{
  0%{transform:translateY(0) scale(.5);opacity:0;}
@@ -145,7 +115,6 @@ html,body{
 <body>
 
 <div class="wrapper" id="wrap">
-
  <canvas id="envCanvas"></canvas>
 
  <div id="instruction">
@@ -153,16 +122,13 @@ html,body{
    Click the envelope to open ✨
  </div>
 
- <!-- signature modal -->
  <div id="sigModal">
   <div class="sigCard">
-   <h2 style="font-family:'Dancing Script';color:var(--deep);text-align:center;margin-bottom:10px">
-     Princess Sid, please sign your Royal Autograph
-   </h2>
+   <h2 style="font-family:'Dancing Script';color:var(--deep);text-align:center;margin:0 0 10px">Princess Sid, please sign your Royal Autograph</h2>
 
    <canvas id="sigCanvas"></canvas>
 
-   <div style="text-align:center;margin-top:12px">
+   <div style="text-align:center;margin-top:10px;">
      <button class="btn btnClear" id="clearSig">Clear</button>
      <button class="btn btnConfirm" id="confirmSig">Confirm</button>
    </div>
@@ -173,24 +139,20 @@ html,body{
 
 </div>
 
-<!-- GIF BOX -->
 <div id="gifBox"><img id="gifImg"></div>
 
-<!-- PNG 6 sec box -->
-<div id="holdImageBox"><img id="holdImage" src="image.png"></div>
+<!-- NEW: 6s PNG overlay after GIFs -->
+<div id="holdImageBox">
+  <img id="holdImage" src="image.png" alt="Princess image" />
+</div>
 
-<!-- CERT + LETTER -->
 <div class="revealWrap">
-
  <div id="certificate">
    <div class="card">
-     <h2 style="font-family:'Dancing Script';color:var(--deep);font-size:30px;margin:0">
-       🎀 Official Princess Certificate
-     </h2>
+     <h2 style="font-family:'Dancing Script';color:var(--deep);font-size:30px;margin:0">🎀 Official Princess Certificate</h2>
      <div class="certBox">
        <p style="color:#ffdcec;font-size:17px;">
-         This certifies that <b style="color:#ff9cdc">Sid</b> is a true Princess —
-         sweet, strong, talented & deserving of everything beautiful.
+         This certifies that <b style="color:#ff9cdc">Sid</b> is a true Princess — soft, strong, talented, deserving of everything beautiful.
        </p>
        <div id="sigPlaced"></div>
      </div>
@@ -199,98 +161,55 @@ html,body{
 
  <div id="letter">
    <div class="card">
-     <h2 style="font-family:'Dancing Script';color:var(--deep);font-size:30px;margin:0">
-       💌 A Note For You
-     </h2>
+     <h2 style="font-family:'Dancing Script';color:var(--deep);font-size:30px;margin:0">💌 A Note For You</h2>
      <p style="color:#f4c6e0;line-height:1.6;font-size:17px;margin-top:12px">
-       Sid… you're really a bunch of cuteness & strength.  
-       Tum jo mehnat karti ho — it's beautiful. 💗<br><br>
-       Stress hota hai… but breathe. Stay soft, stay calm.  
-       Everything you want will come. 💕<br><br>
-       I'm always proud of you, Princess. 👑💞
+       Sid… you’re really a bunch of cuteness and strength.  
+       Tum itni mehnat karti ho, itni dedication se chalti ho — it's beautiful. 💗<br><br>
+       Stress hota hai but it's okay… breathe. Stay calm. Stay soft.  
+       Everything you're dreaming about will come, slowly but surely. 💕<br><br>
+       Main hamesha yahin hoon — proud of you, cheering for you.  
+       Never doubt your worth, Princess. 👑💞
      </p>
    </div>
  </div>
-
 </div>
 
-<!-- MUSIC 1 -->
+<div id="burst"></div>
+
+<!-- SONG 1 (GIF music) -->
 <audio id="gifMusic" src="https://quotesgames.com/files/I-Think-They-Call-This-Love-Matthew-Ifield-Cover.mp3" preload="auto"></audio>
 
-<!-- MUSIC 2 -->
-<audio id="letterMusic"
-src="https://download.downringtone.com/audio/e9685a2856feb05f00d911fe07dbde95/L3TkhLK4TBF2bJp0R7toMkC1RXE3WL8zOlC8Uak7L1H1inzSigliM3lmgZ00Q3BudXzalQVlcZCwWtpqcj3Hf8j1kvlvb6V0htc3Y3BwPr73U5==.mp3"
-preload="auto">
-</audio>
+<!-- SONG 2 (certificate music) -->
+<audio id="letterMusic" 
+src="https://download.downringtone.com/audio/e9685a2856feb05f00d911fe07dbde95/L3TkhLK4TBF2bJp0R7toMkC1RXE3WL8zOlC8Uak7L1H1inzSigliM3lmgZ00Q3BudXzalQVlcZCwWtpqcj3Hf8j1kvlvb6V0htc3Y3BwPr73U5==.mp3" 
+preload="auto"></audio>
 
 <script>
 // ELEMENTS
 const wrap=document.getElementById("wrap");
 const canvas=document.getElementById("envCanvas");
 const ctx=canvas.getContext("2d");
+const instruction=document.getElementById("instruction");
 const sigModal=document.getElementById("sigModal");
 const sigCanvas=document.getElementById("sigCanvas");
 const sigCtx=sigCanvas.getContext("2d");
 const confirmBtn=document.getElementById("confirmSig");
 const clearBtn=document.getElementById("clearSig");
 const sigMsg=document.getElementById("sigMsg");
-
 const gifBox=document.getElementById("gifBox");
 const gifImg=document.getElementById("gifImg");
-
-const holdImageBox=document.getElementById("holdImageBox");
-
 const certificate=document.getElementById("certificate");
 const letter=document.getElementById("letter");
 const sigPlaced=document.getElementById("sigPlaced");
-
+const burst=document.getElementById("burst");
 const gifMusic=document.getElementById("gifMusic");
 const letterMusic=document.getElementById("letterMusic");
+// NEW
+const holdImageBox=document.getElementById("holdImageBox");
 
-let drawn=false,signing=false;
+let drawn=false,signing=false,emojiTimer=null;
 
-/* MOBILE RESPONSIVE FIX */
-function resizeAll(){
- let r=wrap.getBoundingClientRect();
- canvas.width=r.width*devicePixelRatio;
- canvas.height=460*devicePixelRatio;
- canvas.style.width=r.width+"px";
- canvas.style.height="460px";
-}
-resizeAll();
-window.addEventListener("resize",resizeAll);
-
-/* CLICK TO SIGN */
-canvas.addEventListener("click",()=>sigModal.classList.add("show"));
-
-/* SIGNATURE LOGIC */
-sigCanvas.addEventListener("pointerdown",e=>{
- signing=true;drawn=true;sigMsg.textContent="";
- let r=sigCanvas.getBoundingClientRect();
- sigCtx.beginPath();
- sigCtx.moveTo(e.clientX-r.left,e.clientY-r.top);
-});
-sigCanvas.addEventListener("pointermove",e=>{
- if(!signing)return;
- let r=sigCanvas.getBoundingClientRect();
- sigCtx.lineWidth=5;sigCtx.strokeStyle="#ff69b4";
- sigCtx.lineTo(e.clientX-r.left,e.clientY-r.top);sigCtx.stroke();
- sigCtx.beginPath();
- sigCtx.moveTo(e.clientX-r.left,e.clientY-r.top);
-});
-sigCanvas.addEventListener("pointerup",()=>signing=false);
-clearBtn.onclick=()=>{sigCtx.clearRect(0,0,sigCanvas.width,sigCanvas.height);drawn=false;};
-
-/* MUSIC HELPERS */
-function fadeIn(a){
- a.volume=0;a.currentTime=0;a.play().catch(()=>{});
- let x=0,set=setInterval(()=>{x+=0.06;a.volume=x;if(x>=1)clearInterval(set);},60);
-}
-function fadeOut(a){
- let x=a.volume,set=setInterval(()=>{x-=0.05;a.volume=x;if(x<=0){a.pause();clearInterval(set);} },60);
-}
-
-/* GIF LIST */
+// GIFs
 const gifs=[
  "https://64.media.tumblr.com/a35bdef48388e8a53ba334f4c3729eb5/cf7ffbf099b9bbcb-9d/s640x960/44161faf6427137625849ddf2a016c71e8cc36ec.gif",
  "https://i.pinimg.com/originals/0e/bd/86/0ebd8658f7610a409cdce22341cb2125.gif",
@@ -298,22 +217,108 @@ const gifs=[
  "https://64.media.tumblr.com/c2106e621e3e17b6fde6e17f889227f7/cf7ffbf099b9bbcb-5e/s500x750/cd638aa91ad60f515de1871bf179b6325d91bb56.gif"
 ];
 
-/* CONFIRM */
+resizeAll();
+window.addEventListener("resize",resizeAll);
+
+function resizeAll(){
+ let r=wrap.getBoundingClientRect();
+ canvas.width=r.width*devicePixelRatio;
+ canvas.height=460*devicePixelRatio;
+ canvas.style.width=r.width+"px";
+ canvas.style.height="460px";
+ ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+ drawEnv();
+
+ sigCanvas.width=r.width*0.9*devicePixelRatio;
+ sigCanvas.height=130*devicePixelRatio;
+ sigCanvas.style.width=(r.width*0.9)+"px";
+ sigCanvas.style.height="130px";
+}
+
+function drawEnv(){
+ let w=canvas.width/devicePixelRatio,h=canvas.height/devicePixelRatio;
+ let flap=h*0.42;
+
+ ctx.clearRect(0,0,w,h);
+
+ ctx.fillStyle="#ffd1dc";
+ ctx.fillRect(0,flap/2,w,h-flap/2);
+
+ ctx.beginPath();
+ ctx.moveTo(0,h);
+ ctx.lineTo(w/2,h-flap/2);
+ ctx.lineTo(w,h);
+ ctx.fill();
+
+ ctx.fillStyle="#ffb6c1";
+ ctx.beginPath();
+ ctx.moveTo(0,0);
+ ctx.lineTo(w,0);
+ ctx.lineTo(w/2,flap);
+ ctx.fill();
+}
+
+canvas.addEventListener("click",()=>sigModal.classList.add("show"));
+
+sigCanvas.addEventListener("pointerdown",e=>{
+ signing=true;drawn=true;sigMsg.textContent="";
+ let r=sigCanvas.getBoundingClientRect(),p=e;
+ sigCtx.beginPath();
+ sigCtx.moveTo(p.clientX-r.left,p.clientY-r.top);
+});
+sigCanvas.addEventListener("pointermove",e=>{
+ if(!signing)return;
+ let r=sigCanvas.getBoundingClientRect(),p=e;
+ sigCtx.lineWidth=5;sigCtx.strokeStyle="#ffd0e7";
+ sigCtx.lineTo(p.clientX-r.left,p.clientY-r.top);sigCtx.stroke();
+ sigCtx.beginPath();
+ sigCtx.moveTo(p.clientX-r.left,p.clientY-r.top);
+});
+sigCanvas.addEventListener("pointerup",()=>signing=false);
+
+clearBtn.onclick=()=>{sigCtx.clearRect(0,0,sigCanvas.width,sigCanvas.height);drawn=false;}
+
+function fadeIn(a){
+ a.volume=0;
+ a.currentTime=0;
+ a.play().catch(()=>{});
+ let i=0,iv=setInterval(()=>{
+  i+=0.05;
+  a.volume=Math.min(i,1);
+  if(i>=1)clearInterval(iv);
+ },60);
+}
+
+function fadeOut(a){
+ let i=a.volume,iv=setInterval(()=>{
+  i-=0.05;a.volume=Math.max(i,0);
+  if(i<=0){clearInterval(iv);a.pause();}
+ },60);
+}
+
+// CONFIRM SIGNATURE
 confirmBtn.onclick=()=>{
- if(!drawn){sigMsg.textContent="Sign first!";return;}
+ if(!drawn){
+  sigMsg.textContent="Sign first!";
+  return;
+ }
 
  sigModal.classList.remove("show");
+ canvas.style.opacity=0; instruction.style.opacity=0;
+ setTimeout(()=>canvas.style.display="none",400);
 
  fadeIn(gifMusic);
- setTimeout(()=>playGIF(0),400);
+
+ setTimeout(()=>playGIF(0),500);
 };
 
-/* GIF DISPLAY */
+// GIF SEQUENCE
 function playGIF(i){
  if(i>=gifs.length){
-   fadeOut(gifMusic);
-   showImage6Sec();
-   return;
+  fadeOut(gifMusic);
+  // NEW: show PNG for 6 seconds, then go to cert
+  showHoldImageThenCert();
+  return;
  }
 
  gifBox.style.display="block";
@@ -321,16 +326,16 @@ function playGIF(i){
 
  let img=new Image();
  img.onload=()=>{
-   gifImg.src=gifs[i];
-   setTimeout(()=>gifImg.style.opacity=1,40);
-   setTimeout(()=>{gifImg.style.opacity=0;setTimeout(()=>playGIF(i+1),280)},2000);
+  gifImg.src=gifs[i];
+  setTimeout(()=>gifImg.style.opacity=1,50);
+  setTimeout(()=>{gifImg.style.opacity=0;setTimeout(()=>playGIF(i+1),300)},2000);
  };
  img.onerror=()=>playGIF(i+1);
  img.src=gifs[i];
 }
 
-/* SHOW PNG FOR 6 SECONDS */
-function showImage6Sec(){
+// NEW: show local image.png for 6 seconds
+function showHoldImageThenCert(){
  gifBox.style.display="none";
  holdImageBox.style.display="block";
 
@@ -340,47 +345,51 @@ function showImage6Sec(){
  },6000);
 }
 
-/* CERTIFICATE REVEAL */
+// SHOW CERT + SONG 2
 function showCert(){
+ gifBox.style.display="none";
+
  // place signature
  try{
    let d=sigCanvas.toDataURL();
    sigPlaced.innerHTML=`<img src="${d}" style="height:40px">`;
  }catch{}
 
+ // show cert
  certificate.style.display="block";
+ setTimeout(()=>{
+  certificate.style.opacity=1;
+  certificate.style.transform="translateY(0)";
+ },30);
+
+ // 🔥 START SONG 2 HERE
+ setTimeout(()=>{
+   fadeIn(letterMusic);
+ },200);
 
  setTimeout(()=>{
-   certificate.style.opacity=1;
-   certificate.style.transform="translateY(0)";
- },40);
-
- // MUSIC 2
- setTimeout(()=>fadeIn(letterMusic),300);
-
- setTimeout(()=>{
-   letter.style.display="block";
-   setTimeout(()=>{
-     letter.style.opacity=1;
-     letter.style.transform="translateY(0)";
-   },40);
- },800);
+  letter.style.display="block";
+  setTimeout(()=>{
+   letter.style.opacity=1;
+   letter.style.transform="translateY(0)";
+  },30);
+ },600);
 
  startEmojis();
 }
 
-/* EMOJIS */
+// EMOJIS
 function startEmojis(){
  setInterval(()=>{
   let e=document.createElement("div");
   e.className="floatEmoji";
-  e.textContent=["🎀","💕","✨","💗","👑","🩷","🌸","💌","🐱"][Math.floor(Math.random()*9)];
-  e.style.left=(8+Math.random()*85)+"vw";
+  e.textContent=["🎀","💕","🩷","✨","💗","👑","💌","🥰","🌸","🐱"][Math.floor(Math.random()*10)];
+  e.style.left=(5+Math.random()*90)+"vw";
   document.body.appendChild(e);
-  setTimeout(()=>e.remove(),5000);
+  setTimeout(()=>e.remove(),5100);
  },350);
 }
-
 </script>
+
 </body>
 </html>
