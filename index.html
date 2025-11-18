@@ -8,125 +8,221 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600;700&display=swap');
 
-:root{--pink1:#ffb6d2;--pink2:#ff69b4;--deep:#d81b60}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{background:#000;color:#fff;font-family:Poppins,Arial;overflow-x:hidden}
-.wrapper{width:820px;max-width:96vw;margin:auto;padding-top:60px;position:relative}
+:root{
+ --pink1:#ffb6d2;
+ --pink2:#ff69b4;
+ --deep:#d81b60;
+}
 
-/* Envelope */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+ background:#000;
+ color:#fff;
+ font-family:Poppins,Arial;
+ overflow-x:hidden;
+}
+
+/* MAIN WRAPPER */
+.wrapper{
+ width:820px;
+ max-width:96vw;
+ margin:auto;
+ padding-top:60px;
+ position:relative;
+}
+
+/* ENVELOPE CANVAS */
 #envCanvas{
  width:100%;
  height:460px;
  border-radius:16px;
+ display:block;
 }
 
-/* Instruction — black text, now click-through */
+/* INSTRUCTION TEXT (BLACK) */
 #instruction{
- position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
- color:#000;font-weight:700;text-align:center;
- text-shadow:0 0 4px rgba(255,255,255,0.8);
- pointer-events:none; /* IMPORTANT: don't block clicks on envelope */
+ position:absolute;
+ left:50%;
+ top:50%;
+ transform:translate(-50%,-50%);
+ font-weight:700;
+ color:#000;
+ text-align:center;
+ text-shadow:0 0 6px rgba(255,255,255,0.6);
+}
+#instruction span{
+ font-size:60px;
+ display:block;
+ margin-bottom:10px;
 }
 
-/* Signature modal */
+/* SIGNATURE MODAL */
 #sigModal{
- position:fixed;inset:0;background:rgba(0,0,0,.85);
- display:flex;justify-content:center;align-items:center;
- opacity:0;visibility:hidden;transition:.25s;z-index:60;
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.85);
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ opacity:0;
+ visibility:hidden;
+ transition:.25s;
+ z-index:60;
 }
 #sigModal.show{opacity:1;visibility:visible;}
 
 .sigCard{
- background:#111;padding:20px;border-radius:16px;
- width:90%;max-width:720px;border:1px solid rgba(255,255,255,.1);
+ width:90%;
+ max-width:720px;
+ background:#111;
+ padding:20px;
+ border-radius:16px;
+ border:1px solid rgba(255,255,255,.1);
 }
+
 #sigCanvas{
- width:100%;height:130px;background:#080808;
- border-radius:12px;border:2px solid rgba(255,105,180,.2);
+ width:100%;
+ height:130px;
+ background:#080808;
+ border-radius:12px;
+ border:2px solid rgba(255,105,180,.2);
  touch-action:none;
 }
 
 /* Buttons */
-.btn{padding:10px 16px;border-radius:999px;border:none;cursor:pointer;font-weight:700}
+.btn{
+ padding:10px 16px;
+ border-radius:999px;
+ border:none;
+ cursor:pointer;
+ font-weight:700;
+}
 .btnClear{background:#111;color:var(--pink1)}
 .btnConfirm{background:var(--pink2);color:#fff}
 
-/* GIF Box — fixed center */
+/* GIF BOX */
 #gifBox{
- position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
- width:95vw;max-width:1100px;max-height:85vh;
- background:#000;border-radius:14px;padding:10px;
+ position:fixed;
+ left:50%;
+ top:50%;
+ transform:translate(-50%,-50%);
+ width:95vw;
+ max-width:1100px;
+ max-height:85vh;
+ background:#000;
+ border-radius:14px;
+ padding:10px;
  border:1px solid rgba(255,255,255,.15);
- display:none;z-index:30;
- display:flex;justify-content:center;align-items:center;
+ display:none;
+ z-index:-1;
+ justify-content:center;
+ align-items:center;
 }
 #gifImg{
- width:100%;height:auto;max-height:80vh;object-fit:contain;opacity:0;
+ width:100%;
+ height:auto;
+ max-height:80vh;
+ object-fit:contain;
+ opacity:0;
  transition:.25s;
 }
 
-/* PNG overlay — NO HEART FRAME */
+/* PNG SCREEN */
 #holdImageBox{
- position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
- width:95vw;max-width:1100px;max-height:85vh;
- display:none;z-index:40;
+ position:fixed;
+ left:50%;
+ top:50%;
+ transform:translate(-50%,-50%);
+ width:95vw;
+ max-width:1100px;
+ max-height:85vh;
+ display:none;
+ z-index:40;
 }
 #holdInnerFrame{
- padding:16px;border-radius:20px;
+ padding:16px;
+ border-radius:20px;
  background:radial-gradient(circle at top,#2b0b26,#05040a);
  animation:pulseGlow 1.8s ease-in-out infinite;
  position:relative;
 }
 #holdImage{
- width:100%;max-height:55vh;object-fit:contain;display:block;margin:auto;
+ width:100%;
+ max-height:55vh;
+ object-fit:contain;
+ display:block;
+ margin:auto;
 }
 
-/* Floating roses */
+/* Roses */
 .roseFloat{
- position:absolute;font-size:22px;opacity:0;
+ position:absolute;
+ font-size:22px;
+ opacity:0;
  pointer-events:none;
  animation:roseFloat 4s ease-out forwards;
 }
 
 /* Heart trail */
 .heartTrail{
- position:absolute;font-size:18px;animation:heartTrail 1.2s ease-out forwards;
+ position:absolute;
+ font-size:18px;
  pointer-events:none;
+ animation:heartTrail 1.2s ease-out forwards;
 }
 
-/* PNG Text */
+/* PNG TEXT */
 #pngMessage{
- text-align:center;color:#ffd6f5;font-size:18px;margin-top:6px;
+ text-align:center;
+ color:#ffd6f5;
+ font-size:18px;
+ margin-top:6px;
 }
 #pngSparkle{
- text-align:center;margin-top:4px;
- font-size:20px;color:#ffb3d9;
+ text-align:center;
+ margin-top:4px;
+ font-size:20px;
+ color:#ffb3d9;
  animation:sparkle 1.1s infinite alternate ease-in-out;
 }
 
-/* CERT + LETTER */
+/* CERTIFICATE & LETTER */
 .revealWrap{
- position:fixed;left:50%;top:50%;
+ position:fixed;
+ left:50%;
+ top:50%;
  transform:translate(-50%,-50%);
- width:100%;pointer-events:none;z-index:45;
+ width:100%;
+ pointer-events:none;
+ z-index:45;
 }
 #certificate,#letter{
- width:min(90%,720px);margin:20px auto;background:#111;
- padding:20px;border-radius:16px;border:1px solid rgba(255,105,180,.2);
- opacity:0;transform:translateY(40px);transition:.5s;display:none;pointer-events:auto;
+ width:min(90%,720px);
+ margin:20px auto;
+ background:#111;
+ padding:20px;
+ border-radius:16px;
+ border:1px solid rgba(255,105,180,.2);
+ opacity:0;
+ transform:translateY(40px);
+ transition:.5s;
+ display:none;
+ pointer-events:auto;
 }
 .certBox{
- background:#181818;border-radius:14px;padding:18px;border:3px solid var(--deep);
- position:relative;text-align:center;
+ background:#181818;
+ border-radius:14px;
+ padding:18px;
+ border:3px solid var(--deep);
+ text-align:center;
+ position:relative;
 }
-
-/* SEALED moved to bottom, not overlapping */
 .certBox::after{
  content:"SEALED";
  position:absolute;
  bottom:10px;
- left:50%;
- transform:translateX(-50%);
+ right:50%;
+ transform:translateX(50%);
  font-family:'Dancing Script';
  font-size:22px;
  color:var(--pink2);
@@ -136,18 +232,21 @@ html,body{background:#000;color:#fff;font-family:Poppins,Arial;overflow-x:hidden
  background:rgba(0,0,0,0.4);
 }
 
-/* Emojis up */
+/* Floating emojis */
 .floatEmoji{
- position:fixed;bottom:-10px;font-size:36px;
- animation:floatUp 5s ease-out forwards;opacity:0;
+ position:fixed;
+ bottom:-10px;
+ font-size:36px;
+ opacity:0;
+ animation:floatUp 5s ease-out forwards;
 }
+
+/* Animations */
 @keyframes floatUp{
  0%{transform:translateY(0) scale(.5);opacity:0;}
  20%{opacity:1;}
  100%{transform:translateY(-100vh) scale(1);opacity:0;}
 }
-
-/* Animations */
 @keyframes pulseGlow{
  0%{box-shadow:0 0 10px rgba(255,105,180,.5);}
  50%{box-shadow:0 0 25px rgba(255,105,180,.9);}
@@ -172,32 +271,38 @@ html,body{background:#000;color:#fff;font-family:Poppins,Arial;overflow-x:hidden
 <body>
 
 <div class="wrapper" id="wrap">
+
  <canvas id="envCanvas"></canvas>
 
  <div id="instruction">
-   <span style="font-size:60px;display:block;margin-bottom:10px;">🎀</span>
+   <span>🎀</span>
    Click the envelope to open ✨
  </div>
 
+ <!-- SIGNATURE MODAL -->
  <div id="sigModal">
   <div class="sigCard">
    <h2 style="font-family:'Dancing Script';color:var(--deep);text-align:center">
      Princess Sid, please sign your Royal Autograph
    </h2>
+
    <canvas id="sigCanvas"></canvas>
+
    <div style="text-align:center;margin-top:10px;">
      <button class="btn btnClear" id="clearSig">Clear</button>
      <button class="btn btnConfirm" id="confirmSig">Confirm</button>
    </div>
-   <div id="sigMsg" style="text-align:center;color:var(--pink1);margin-top:6px;"></div>
+
+   <div id="sigMsg" style="text-align:center;margin-top:10px;color:#ffb6d2"></div>
   </div>
  </div>
+
 </div>
 
 <!-- GIF -->
 <div id="gifBox"><img id="gifImg"></div>
 
-<!-- PNG overlay -->
+<!-- PNG SCREEN -->
 <div id="holdImageBox">
  <div id="holdInnerFrame">
    <img id="holdImage" src="image.png">
@@ -206,16 +311,20 @@ html,body{background:#000;color:#fff;font-family:Poppins,Arial;overflow-x:hidden
  </div>
 </div>
 
-<!-- Certificate + Letter -->
+<!-- CERTIFICATE + LETTER -->
 <div class="revealWrap">
+
  <div id="certificate">
    <div class="card">
      <h2 style="font-family:'Dancing Script';color:var(--deep);font-size:30px">
        🎀 Official Princess Certificate
      </h2>
+
      <div class="certBox">
        <p style="color:#ffdcec;font-size:17px;line-height:1.55;">
-         This certifies that <b style="color:#ff9cdc">Sid</b> is a true Princess — soft, strong, talented, and deserving of everything beautiful.
+         This certifies that <b style="color:#ff9cdc">Sid</b> 
+         is a true Princess — soft, strong, talented, and deserving 
+         of everything beautiful.
        </p>
        <div id="sigPlaced"></div>
      </div>
@@ -229,14 +338,17 @@ html,body{background:#000;color:#fff;font-family:Poppins,Arial;overflow-x:hidden
      </h2>
 
      <p style="color:#f4c6e0;line-height:1.6;font-size:17px;margin-top:12px;white-space:pre-line;">
-Sid… you’re really a bunch of cuteness and strength. Tum itni mehnat karti ho — it's beautiful. 💗
+Sid… you’re really a bunch of cuteness and strength. 
+Tum itni mehnat karti ho — it's beautiful. 💗
 
-Stress hota hai but it’s okay… breathe. Stay calm. Stay soft. Everything you want will come. 💕
+Stress hota hai but it’s okay… breathe. Stay calm. Stay soft. 
+Everything you want will come. 💕
 
 Main hamesha proud hoon — never doubt your worth, Princess. 👑💞
      </p>
    </div>
  </div>
+
 </div>
 
 <!-- MUSIC -->
@@ -246,228 +358,300 @@ src="https://download.downringtone.com/audio/e9685a2856feb05f00d911fe07dbde95/L3
 </audio>
 
 <script>
-/* Variables */
-const wrap=document.getElementById("wrap");
-const canvas=document.getElementById("envCanvas");
-const ctx=canvas.getContext("2d");
-const sigModal=document.getElementById("sigModal");
-const sigCanvas=document.getElementById("sigCanvas");
-const sigCtx=sigCanvas.getContext("2d");
-const gifBox=document.getElementById("gifBox");
-const gifImg=document.getElementById("gifImg");
-const holdImageBox=document.getElementById("holdImageBox");
-const holdInnerFrame=document.getElementById("holdInnerFrame");
-const certificate=document.getElementById("certificate");
-const letter=document.getElementById("letter");
-const gifMusic=document.getElementById("gifMusic");
-const letterMusic=document.getElementById("letterMusic");
-const sigPlaced=document.getElementById("sigPlaced");
-const sigMsg=document.getElementById("sigMsg");
+// ELEMENTS
+const wrap = document.getElementById("wrap");
+const canvas = document.getElementById("envCanvas");
+const ctx = canvas.getContext("2d");
+const instruction = document.getElementById("instruction");
 
-let drawn=false,signing=false;
+const sigModal = document.getElementById("sigModal");
+const sigCanvas = document.getElementById("sigCanvas");
+const sigCtx = sigCanvas.getContext("2d");
+const sigMsg = document.getElementById("sigMsg");
+const clearBtn = document.getElementById("clearSig");
+const confirmBtn = document.getElementById("confirmSig");
 
-/* GIF list */
-const gifs=[
+const gifBox = document.getElementById("gifBox");
+const gifImg = document.getElementById("gifImg");
+
+const holdImageBox = document.getElementById("holdImageBox");
+const holdInnerFrame = document.getElementById("holdInnerFrame");
+
+const certificate = document.getElementById("certificate");
+const letter = document.getElementById("letter");
+const sigPlaced = document.getElementById("sigPlaced");
+
+const gifMusic = document.getElementById("gifMusic");
+const letterMusic = document.getElementById("letterMusic");
+
+// STATE
+let drawn = false;
+let signing = false;
+let roseTimer = null;
+
+// GIFs
+const gifs = [
  "https://64.media.tumblr.com/a35bdef48388e8a53ba334f4c3729eb5/cf7ffbf099b9bbcb-9d/s640x960/44161faf6427137625849ddf2a016c71e8cc36ec.gif",
  "https://i.pinimg.com/originals/0e/bd/86/0ebd8658f7610a409cdce22341cb2125.gif",
  "https://i.pinimg.com/originals/d0/59/38/d05938855efab24f43c756b280f08787.gif",
  "https://64.media.tumblr.com/c2106e621e3e17b6fde6e17f889227f7/cf7ffbf099b9bbcb-5e/s500x750/cd638aa91ad60f515de1871bf179b6325d91bb56.gif"
 ];
 
-/* Resize envelope + signature */
+// RESIZE EVERYTHING
 function resizeAll(){
- canvas.width=wrap.clientWidth*devicePixelRatio;
- canvas.height=460*devicePixelRatio;
- canvas.style.width="100%";
- ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
- drawEnv();
+  const width = wrap.clientWidth;
+  const height = 460;
 
- sigCanvas.width=canvas.width;
- sigCanvas.height=130*devicePixelRatio;
- sigCanvas.style.height="130px";
- sigCtx.lineCap="round";
- sigCtx.lineJoin="round";
+  canvas.width = width * devicePixelRatio;
+  canvas.height = height * devicePixelRatio;
+  canvas.style.width = width + "px";
+  canvas.style.height = height + "px";
+  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+  drawEnv();
+
+  // Signature canvas EASY MODE
+  sigCanvas.width = width * 0.9;
+  sigCanvas.height = 130;
+  sigCanvas.style.width = (width * 0.9) + "px";
+  sigCanvas.style.height = "130px";
+  sigCtx.setTransform(1,0,0,1,0,0);
+  sigCtx.lineCap = "round";
+  sigCtx.lineJoin = "round";
 }
 resizeAll();
-window.onresize=resizeAll;
+window.addEventListener("resize", resizeAll);
 
-/* Draw envelope */
+// DRAW ENVELOPE
 function drawEnv(){
- let w=canvas.width/devicePixelRatio;
- let h=canvas.height/devicePixelRatio;
- let flap=h*0.42;
+  const w = canvas.width / devicePixelRatio;
+  const h = canvas.height / devicePixelRatio;
+  const flap = h * 0.42;
 
- ctx.clearRect(0,0,w,h);
- ctx.fillStyle="#ffd1dc";
- ctx.fillRect(0,flap/2,w,h);
+  ctx.clearRect(0,0,w,h);
 
- ctx.beginPath();
- ctx.moveTo(0,h);ctx.lineTo(w/2,h-flap/2);ctx.lineTo(w,h);ctx.fill();
+  ctx.fillStyle = "#ffd1dc";
+  ctx.fillRect(0, flap/2, w, h - flap/2);
 
- ctx.fillStyle="#ffb6c1";
- ctx.beginPath();
- ctx.moveTo(0,0);ctx.lineTo(w,0);ctx.lineTo(w/2,flap);ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(0,h);
+  ctx.lineTo(w/2, h - flap/2);
+  ctx.lineTo(w,h);
+  ctx.fill();
+
+  ctx.fillStyle = "#ffb6c1";
+  ctx.beginPath();
+  ctx.moveTo(0,0);
+  ctx.lineTo(w,0);
+  ctx.lineTo(w/2, flap);
+  ctx.fill();
 }
 
-/* Open signature modal */
-canvas.onclick=()=>sigModal.classList.add("show");
+// CLICK ANYWHERE → OPEN SIGNATURE ONCE
+document.addEventListener("click", function openSignOnce(){
+  if (!sigModal.classList.contains("show")){
+    sigModal.classList.add("show");
+  }
+  document.removeEventListener("click", openSignOnce);
+}, { once:true });
 
-/* Signature draw */
-sigCanvas.onpointerdown=e=>{
- signing=true;drawn=true;sigMsg.textContent="";
- let r=sigCanvas.getBoundingClientRect();
- sigCtx.beginPath();
- sigCtx.moveTo(e.clientX-r.left,e.clientY-r.top);
-};
-sigCanvas.onpointermove=e=>{
- if(!signing)return;
- let r=sigCanvas.getBoundingClientRect();
- sigCtx.lineWidth=4;sigCtx.strokeStyle="#ff69b4";
- sigCtx.lineTo(e.clientX-r.left,e.clientY-r.top);sigCtx.stroke();
- sigCtx.beginPath();
- sigCtx.moveTo(e.clientX-r.left,e.clientY-r.top);
-};
-sigCanvas.onpointerup=()=>signing=false;
+// SIGNATURE DRAWING
+sigCanvas.addEventListener("pointerdown", (e)=>{
+  signing = true;
+  drawn = true;
+  sigMsg.textContent="";
+  const r = sigCanvas.getBoundingClientRect();
+  sigCtx.beginPath();
+  sigCtx.moveTo(e.clientX - r.left, e.clientY - r.top);
+});
+sigCanvas.addEventListener("pointermove", (e)=>{
+  if (!signing) return;
+  const r = sigCanvas.getBoundingClientRect();
+  const x = e.clientX - r.left;
+  const y = e.clientY - r.top;
 
-document.getElementById("clearSig").onclick=()=>{
- sigCtx.clearRect(0,0,sigCanvas.width,sigCanvas.height);
- drawn=false;
+  sigCtx.lineWidth = 6;
+  sigCtx.strokeStyle = "#ff89c4";
+  sigCtx.lineTo(x,y);
+  sigCtx.stroke();
+  sigCtx.beginPath();
+  sigCtx.moveTo(x,y);
+});
+sigCanvas.addEventListener("pointerup", ()=> signing=false);
+sigCanvas.addEventListener("pointerleave", ()=> signing=false);
+
+clearBtn.onclick = ()=>{
+  sigCtx.clearRect(0,0,sigCanvas.width,sigCanvas.height);
+  drawn=false;
+  sigMsg.textContent="Cleared.";
 };
 
-/* Music fades */
+// AUDIO
 function fadeIn(a){
- a.volume=0;a.currentTime=0;a.play().catch(()=>{});
- let x=0;let I=setInterval(()=>{x+=0.06;a.volume=x;if(x>=1)clearInterval(I)},50);
+  if(!a)return;
+  a.volume=0;
+  a.currentTime=0;
+  a.play().catch(()=>{});
+  let v=0;
+  const t=setInterval(()=>{
+    v+=0.06;
+    a.volume=v;
+    if(v>=1)clearInterval(t);
+  },60);
 }
 function fadeOut(a){
- let x=a.volume;let I=setInterval(()=>{x-=0.06;a.volume=x;if(x<=0){a.pause();clearInterval(I)}} ,50);
+  if(!a)return;
+  let v=a.volume;
+  const t=setInterval(()=>{
+    v-=0.06;
+    a.volume=v;
+    if(v<=0){
+      a.pause();
+      clearInterval(t);
+    }
+  },60);
 }
 
-/* Confirm signature */
-document.getElementById("confirmSig").onclick=()=>{
- if(!drawn){sigMsg.textContent="Please sign first!";return;}
+// CONFIRM SIGNATURE
+confirmBtn.onclick = ()=>{
+  if(!drawn){
+    sigMsg.textContent="Please sign first!";
+    return;
+  }
 
- sigModal.classList.remove("show");
- canvas.style.opacity=0;instruction.style.opacity=0;
+  sigModal.classList.remove("show");
 
- setTimeout(()=>{canvas.style.display="none"},400);
+  canvas.style.opacity=0;
+  instruction.style.opacity=0;
 
- fadeIn(gifMusic);
+  setTimeout(()=> canvas.style.display="none",400);
 
- // small delay so envelope fully gone before GIF shows
- setTimeout(()=>playGIF(0),550);
+  fadeIn(gifMusic);
+
+  setTimeout(()=>{
+    gifBox.style.zIndex="40";
+    playGIF(0);
+  },500);
 };
 
-/* Play GIFs */
+// GIF SEQUENCE
 function playGIF(i){
- if(i>=gifs.length){
-   fadeOut(gifMusic);
-   showPNGScreen();
-   return;
- }
+  if(i>=gifs.length){
+    fadeOut(gifMusic);
+    showPNGScreen();
+    return;
+  }
 
- gifBox.style.display="flex";
- gifImg.style.opacity=0;
+  gifBox.style.display="flex";
+  gifImg.style.opacity=0;
 
- let temp=new Image();
- temp.onload=()=>{
-   gifImg.src=gifs[i];
-   setTimeout(()=>gifImg.style.opacity=1,50);
-   setTimeout(()=>{
-     gifImg.style.opacity=0;
-     setTimeout(()=>playGIF(i+1),150);
-   },1200);
- };
- temp.onerror=()=>playGIF(i+1);
- temp.src=gifs[i];
+  const temp = new Image();
+  temp.onload = ()=>{
+    gifImg.src = gifs[i];
+    setTimeout(()=> gifImg.style.opacity=1,60);
+
+    setTimeout(()=>{
+      gifImg.style.opacity=0;
+      setTimeout(()=> playGIF(i+1),150);
+    },1200);
+  };
+  temp.onerror = ()=> playGIF(i+1);
+  temp.src = gifs[i];
 }
 
-/* Show PNG screen */
+// PNG SCREEN
 function showPNGScreen(){
- gifBox.style.display="none";
- holdImageBox.style.display="block";
+  gifBox.style.display="none";
+  gifBox.style.zIndex="-1";
 
- fadeIn(letterMusic); // start 2nd song immediately
+  holdImageBox.style.display="block";
 
- startRoses();
- enableHeartDrawing();
+  fadeIn(letterMusic);
 
- setTimeout(()=>{
-   holdImageBox.style.display="none";
-   showCertificate();
- },6000);
+  startRoses();
+  enableHeartDrawing();
+
+  setTimeout(()=>{
+    holdImageBox.style.display="none";
+    showCertificate();
+  },6000);
 }
 
-let roseTimer=null;
-
-/* Floating roses */
+// ROSES
 function startRoses(){
- if(roseTimer) return;
- roseTimer=setInterval(()=>{
-   let r=document.createElement("div");
-   r.className="roseFloat";
-   r.textContent="🌹";
-   let rect=holdInnerFrame.getBoundingClientRect();
-   let x=Math.random()*(rect.width-30);
-   let y=rect.height-40;
-   r.style.left=x+"px";
-   r.style.top=y+"px";
-   holdInnerFrame.appendChild(r);
-   setTimeout(()=>r.remove(),4000);
- },350);
+  if(roseTimer) return;
+  roseTimer=setInterval(()=>{
+    const r=document.createElement("div");
+    r.className="roseFloat";
+    r.textContent="🌹";
+
+    const rect = holdInnerFrame.getBoundingClientRect();
+    const x = Math.random()*(rect.width-40)+10;
+    const y = rect.height-40;
+
+    r.style.left=x+"px";
+    r.style.top=y+"px";
+
+    holdInnerFrame.appendChild(r);
+    setTimeout(()=> r.remove(),4000);
+  },360);
 }
 
+// HEART DRAWING
 function enableHeartDrawing(){
- holdInnerFrame.onpointermove=(e)=>{
-   let rect=holdInnerFrame.getBoundingClientRect();
-   let x=e.clientX-rect.left;
-   let y=e.clientY-rect.top;
-   if(x<0||y<0||x>rect.width||y>rect.height)return;
-   let h=document.createElement("div");
-   h.className="heartTrail";
-   h.textContent="💖";
-   h.style.left=(x-8)+"px";
-   h.style.top=(y-8)+"px";
-   holdInnerFrame.appendChild(h);
-   setTimeout(()=>h.remove(),1200);
- };
+  holdInnerFrame.onpointermove = (e)=>{
+    const rect = holdInnerFrame.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    if(x<0||y<0||x>rect.width||y>rect.height) return;
+
+    const h=document.createElement("div");
+    h.className="heartTrail";
+    h.textContent="💖";
+    h.style.left=(x-8)+"px";
+    h.style.top=(y-8)+"px";
+    holdInnerFrame.appendChild(h);
+
+    setTimeout(()=>h.remove(),1200);
+  };
 }
 
-/* Certificate */
+// CERTIFICATE + LETTER
 function showCertificate(){
- try{
-   let d=sigCanvas.toDataURL();
-   sigPlaced.innerHTML=`<img src="${d}" style="height:40px">`;
- }catch{}
+  try{
+    const d=sigCanvas.toDataURL();
+    sigPlaced.innerHTML=`<img src="${d}" style="height:40px;border-radius:6px;">`;
+  }catch(e){}
 
- certificate.style.display="block";
- setTimeout(()=>{
-   certificate.style.opacity=1;
-   certificate.style.transform="translateY(0)";
- },40);
+  certificate.style.display="block";
+  setTimeout(()=>{
+    certificate.style.opacity=1;
+    certificate.style.transform="translateY(0)";
+  },40);
 
- setTimeout(()=>{
-   letter.style.display="block";
-   setTimeout(()=>{
-     letter.style.opacity=1;
-     letter.style.transform="translateY(0)";
-   },40);
- },600);
+  setTimeout(()=>{
+    letter.style.display="block";
+    setTimeout(()=>{
+      letter.style.opacity=1;
+      letter.style.transform="translateY(0)";
+    },40);
+  },600);
 
- startEmojis();
+  startEmojis();
 }
 
-/* floating emojis */
+// EMOJIS
 function startEmojis(){
- setInterval(()=>{
-   let e=document.createElement("div");
-   e.className="floatEmoji";
-   e.textContent=["🎀","💕","🩷","✨","💗","👑","💌","🥰","🌸","🐱"][Math.floor(Math.random()*10)];
-   e.style.left=(10+Math.random()*80)+"vw";
-   document.body.appendChild(e);
-   setTimeout(()=>e.remove(),5000);
- },350);
+  setInterval(()=>{
+    const e=document.createElement("div");
+    e.className="floatEmoji";
+    e.textContent=["🎀","💕","🩷","✨","💗","👑","💌","🥰","🌸","🐱"][Math.floor(Math.random()*10)];
+    e.style.left=(10+Math.random()*80)+"vw";
+    document.body.appendChild(e);
+    setTimeout(()=>e.remove(),5000);
+  },350);
 }
 </script>
+
 </body>
 </html>
